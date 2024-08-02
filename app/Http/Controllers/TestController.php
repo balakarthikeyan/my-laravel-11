@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Note;
 use App\Helpers\Helper;
 use App\Enums\NoteStatus;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Services\CustomService;
 use App\Interfaces\TestInterface;
@@ -87,6 +88,21 @@ class TestController extends Controller implements TestInterface
         $note = Note::create($input);
     
         dd($note->toArray());
+    }
+
+    /**
+     * Write code on Once Method
+     *
+     * @return response()
+     */
+    public function testOnceMethod()
+    {
+        $random1 = Str::random(10);
+        $random2 = Helper::randomOnceMethod();
+        $random3 = Str::random(10);
+        $random4 = Helper::randomOnceMethod();
+
+        dd($random1, $random2, $random3, $random4);
     }
 
 }

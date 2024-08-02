@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\NoteController;
 use App\Http\Controllers\TestController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\LocalizationController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -25,6 +26,7 @@ Route::get('test-interface', [TestController::class, 'testInferfaceMethod']);
 Route::get('test-service', [TestController::class, 'testServiceMethod']);
 Route::get('test-enum', [TestController::class, 'testEnumMethod']);
 Route::get('test-trait', [TestController::class, 'testTraitMethod']);
+Route::get('test-once', [TestController::class, 'testOnceMethod']);
 
 Route::middleware(['logRequests'])->group(function () {
     Route::get('/middleware-1', function () {
@@ -40,3 +42,6 @@ Route::get('users-json', function () {
     return User::query()->paginate(10);
 });
 Route::get('users', [UserController::class, 'index']);
+
+Route::get('lang', [LocalizationController::class, 'index']);
+Route::get('change/lang', [LocalizationController::class, 'lang_change'])->name('LangChange');
