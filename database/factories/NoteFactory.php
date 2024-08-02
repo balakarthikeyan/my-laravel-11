@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,7 +18,9 @@ class NoteFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'title' => $this->faker->text(),
+            'slug' => Str::slug($this->faker->text()),
+            'content' => $this->faker->paragraph()
         ];
     }
 }

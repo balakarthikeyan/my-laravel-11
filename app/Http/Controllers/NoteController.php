@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Http\RedirectResponse;
 use App\Http\Requests\NoteStoreRequest;
+use App\Exceptions\InvalidNoteException;
 use App\Http\Requests\NoteUpdateRequest;
 
 class NoteController extends Controller
@@ -47,6 +48,12 @@ class NoteController extends Controller
      */
     public function show(Note $note): View
     {
+        $note = Note::findOrFail($note->id);
+        
+        if (!$note) {
+            throw new InvalidNoteException("Note with ID not found.");
+        }
+
         return view('notes.show', compact('note'));
     }
 
