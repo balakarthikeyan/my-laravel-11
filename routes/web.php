@@ -1,8 +1,10 @@
 <?php
 
+use App\Models\User;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\NoteController;
 use App\Http\Controllers\TestController;
+use App\Http\Controllers\UserController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -33,3 +35,8 @@ Route::middleware(['logRequests'])->group(function () {
         return 'Example route 2';
     });
 });
+
+Route::get('users-json', function () {
+    return User::query()->paginate(10);
+});
+Route::get('users', [UserController::class, 'index']);
