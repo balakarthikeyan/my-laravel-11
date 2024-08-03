@@ -8,14 +8,6 @@ use Illuminate\Support\Carbon;
 class Helper
 {
     /**
-     * Create a new class instance.
-     */
-    public function __construct()
-    {
-        //
-    }
-
-    /**
      * Carbon Method
      *
      * @return response()
