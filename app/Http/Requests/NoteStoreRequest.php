@@ -3,7 +3,6 @@
 namespace App\Http\Requests;
 
 use App\Http\Requests\BaseRequest;
-use Illuminate\Foundation\Http\FormRequest;
 
 class NoteStoreRequest extends BaseRequest
 {
@@ -12,7 +11,7 @@ class NoteStoreRequest extends BaseRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**

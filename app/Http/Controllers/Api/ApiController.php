@@ -1,12 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Http\Client\Request;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Http\Exceptions\HttpResponseException;
+use App\Http\Controllers\Controller;
 
 class ApiController extends Controller
 {
@@ -49,41 +46,54 @@ class ApiController extends Controller
      */
     public function response($data, $headers = []): JsonResponse
     {
+        if (!empty($data)) {
+            $data['status'] = $this->getStatusCode();
+        }
+    
         return new JsonResponse($data, $this->getStatusCode(), $headers);
     }
 
     /**
      * Sets an error message and returns a JSON response
      *
-     * @param string $errors
-     * @param array $headers
+     * @param string $message
+     * @param array $errors
      * @return JsonResponse
      */
-    public function respondWithErrors(string $errors, $headers = []): JsonResponse
+    public function respondWithErrors(string $message, $errors = []): JsonResponse
     {
         $data = [
-            'status' => $this->getStatusCode(),
-            'errors' => $errors,
+            'success'   => false,
+            'data'      => $errors
         ];
 
-        return new JsonResponse($data, $this->getStatusCode(), $headers);
+        if (!empty($message)) {
+            $data['message'] = $message;
+        }
+
+        return $this->response($data);
     }
 
     /**
      * Sets an error message and returns a JSON response
      *
+     * @param $result
      * @param string $success
      * @param array $headers
      * @return JsonResponse
      */
-    public function respondWithSuccess(string $success, $headers = []): JsonResponse
+    public function respondWithSuccess($result, string $success, $headers = []): JsonResponse
     {
         $data = [
-            'status' => $this->getStatusCode(),
-            'success' => $success,
+            'success'   => true,
+            'data'      => $result
         ];
 
-        return new JsonResponse($data, $this->getStatusCode(), $headers);
+        if (!empty($success)) {
+            $data['message'] = $success;
+        }
+
+        return $this->response($data, $headers);
     }
 
     /**
@@ -122,15 +132,4 @@ class ApiController extends Controller
         return $this->setStatusCode(404)->respondWithErrors($message);
     }
 
-    /**
-     * Returns a 201 Created
-     *
-     * @param array $data
-     *
-     * @return JsonResponse
-     */
-    public function respondCreated($data = []): JsonResponse
-    {
-        return $this->setStatusCode(201)->response($data);
-    }
 }

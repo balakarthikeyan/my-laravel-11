@@ -3,12 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
-use Illuminate\Http\Request;
+use Illuminate\View\View;
 use App\Classes\ApiResponseClass;
 use Illuminate\Support\Facades\DB;
-use App\Http\Controllers\ApiController;
+use App\Http\Controllers\Api\ApiController;
 use App\Http\Resources\ProductResource;
-use Illuminate\Support\Facades\Validator;
 use App\Http\Requests\ProductStoreRequest;
 use App\Http\Requests\ProductUpdateRequest;
 use App\Interfaces\ProductRepositoryInterface;
@@ -27,7 +26,7 @@ class ProductController extends ApiController
     {
         $data = $this->productRepositoryInterface->index();
 
-        return $this->response(ProductResource::collection($data));
+        return $this->respondWithSuccess(ProductResource::collection($data), 'Product Listed Successfully');
     }
 
     /**
@@ -37,14 +36,15 @@ class ProductController extends ApiController
     {
         $details = [
             'name' => $request->name,
-            'details' => $request->details
+            'details' => $request->details,
+            'category_id' => $request->category_id
         ];
         DB::beginTransaction();
         try {
-            $product = $this->productRepositoryInterface->store($details);
+            $product = $this->productRepositoryInterface->store($details); 
 
             DB::commit();
-            return ApiResponseClass::sendResponse(new ProductResource($product), 'Product Create Successful', 201);
+            return $this->setStatusCode(201)->respondWithSuccess(new ProductResource($product), 'Product Created Successfully');
         } catch (\Exception $ex) {
             return ApiResponseClass::rollback($ex);
         }
@@ -57,7 +57,7 @@ class ProductController extends ApiController
     {
         $product = $this->productRepositoryInterface->show($product->id);
 
-        return ApiResponseClass::sendResponse(new ProductResource($product), '', 200);
+        return $this->respondWithSuccess(new ProductResource($product), 'Product Retrived Successfully');
     }
 
     /**
@@ -67,14 +67,15 @@ class ProductController extends ApiController
     {
         $updateDetails = [
             'name' => $request->name,
-            'details' => $request->details
+            'details' => $request->details,
+            'category_id' => $request->category_id
         ];
         DB::beginTransaction();
         try {
-            $product = $this->productRepositoryInterface->update($updateDetails, $product->id);
+            $this->productRepositoryInterface->update($updateDetails, $product->id);
 
             DB::commit();
-            return ApiResponseClass::sendResponse($product, 'Product Update Successful', 201);
+            return $this->setStatusCode(201)->respondWithSuccess(new ProductResource($product), 'Product Updated Successfully');
         } catch (\Exception $ex) {
             return ApiResponseClass::rollback($ex);
         }
@@ -87,6 +88,18 @@ class ProductController extends ApiController
     {
         $this->productRepositoryInterface->delete($product->id);
 
-        return ApiResponseClass::sendResponse([], 'Product Delete Successful', 204);
+        return $this->setStatusCode(204)->respondWithSuccess([], 'Product Deleted Successfully');
+    }
+
+    /**
+     * Display a listing of the resource.
+     */
+    public function list(): View
+    {
+        // $products = Product::latest()->paginate(5);
+        $products = Product::with('category')->paginate(5);
+          
+        return view('products.list', compact('products'))
+                    ->with('i', (request()->input('page', 1) - 1) * 5);
     }
 }

@@ -13,15 +13,15 @@ class ApiResponseClass
     public static function rollback($e, $message = "Something went wrong! Process not completed")
     {
         DB::rollBack();
-        self::throw($e, $message);
-    }
-
-    public static function throw($e, $message = "Something went wrong! Process not completed")
-    {
         Log::info($e);
-        throw new HttpResponseException(response()->json(["message" => $message], 500));
+        throw new HttpResponseException(response()->json(["error" => $e, "message" => $message], 500));
     }
 
+    /**
+     * success response method.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public static function sendResponse($result, $message, $code = 200)
     {
         $response = [
@@ -31,6 +31,25 @@ class ApiResponseClass
         if (!empty($message)) {
             $response['message'] = $message;
         }
+        return response()->json($response, $code);
+    }
+
+    /**
+     * return error response.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public static function sendError($error, $errorMessages = [], $code = 404)
+    {
+        $response = [
+            'success' => false,
+            'message' => $error,
+        ];
+
+        if (!empty($errorMessages)) {
+            $response['data'] = $errorMessages;
+        }
+
         return response()->json($response, $code);
     }
 }
