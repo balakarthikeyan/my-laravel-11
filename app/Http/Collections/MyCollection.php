@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Resources;
+namespace App\Http\Collections;
 
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
 class MyCollection extends ResourceCollection
@@ -11,13 +12,19 @@ class MyCollection extends ResourceCollection
         parent::__construct($resource);
     }
 
-    public function toArray($request): array
+    /**
+     * Transform the resource collection into an array.
+     *
+     * @return array<int|string, mixed>
+     */
+    public function toArray(Request $request): array
     {
         return [
             'success' => $this->success,
             'message' => $this->message,
             'extra' => $this->extra,
             'data' => $this->collection,
+            'meta' => ['count' => $this->collection->count()],
             'links' => [
                 'self' => 'link-value',
             ],

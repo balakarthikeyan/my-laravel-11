@@ -2,6 +2,8 @@
 
 use App\Models\User;
 use Illuminate\Support\Facades\Route;
+use App\Http\Collections\MyCollection;
+use App\Http\Resources\UserCollection;
 use App\Http\Controllers\NoteController;
 use App\Http\Controllers\TestController;
 use App\Http\Controllers\UserController;
@@ -45,3 +47,20 @@ Route::get('users', [UserController::class, 'index']);
 
 Route::get('lang', [LocalizationController::class, 'index']);
 Route::get('change/lang', [LocalizationController::class, 'lang_change'])->name('LangChange');
+
+Route::get('users-own-collection', function () {
+    $users = User::query()->paginate(10);
+    return new MyCollection($users, 'Users data as Collection', true, [
+        'follow-me' => true
+    ]);
+});
+
+Route::get('users-collection', function () {
+    $users = User::query()->paginate(10);
+    return (new UserCollection($users))->additional([
+        'meta' => [
+            'prefix' => 'laravel-',
+            'message' => 'laravel'
+        ]
+    ]);
+});
