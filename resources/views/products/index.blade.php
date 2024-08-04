@@ -1,9 +1,9 @@
-@extends('products.layout')
+@extends('layouts.app')
 
 @section('content')
 
 <div class="card mt-5">
-    <h2 class="card-header">Laravel 11 CRUD Example from scratch - ItSolutionStuff.com</h2>
+    <h2 class="card-header">Products</h2>
     <div class="card-body">
 
         @session('success')

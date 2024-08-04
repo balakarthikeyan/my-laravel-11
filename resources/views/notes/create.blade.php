@@ -1,4 +1,4 @@
-@extends('notes.layout')
+@extends('layouts.app')
 
 @section('content')
 

@@ -16,14 +16,14 @@ class Category extends Model
      *
      * @return response()
      */
-    protected $fillable = [ 'name' ];
+    protected $fillable = ['name'];
 
     /**
      * Write code on Method
      *
      * @return response()
      */
-    public function posts(): HasMany
+    public function products(): HasMany
     {
         return $this->hasMany(Product::class);
     }

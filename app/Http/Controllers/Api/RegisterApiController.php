@@ -24,20 +24,21 @@ class RegisterApiController extends ApiController
             'password' => 'required',
             'c_password' => 'required|same:password',
         ]);
-   
-        if($validator->fails()){
-            return $this->respondWithErrors('Validation Error.', $validator->errors());       
+
+        if ($validator->fails()) {
+            return $this->respondWithErrors('Validation Error.', $validator->errors());
         }
-   
+
         $input = $request->all();
         $input['password'] = bcrypt($input['password']);
         $user = User::create($input);
-        // $success['token'] =  $user->createToken('MyApp')->plainTextToken;
+        // $success['token'] =  $user->createToken('testing')->plainTextToken; // Sanctum
+        // $success['token'] =  $user->createToken('testing')->accessToken; // Passport
         $success['name'] =  $user->name;
-   
+
         return $this->respondWithSuccess($success, 'User register successfully.');
     }
-   
+
     /**
      * Login api
      *
@@ -45,15 +46,15 @@ class RegisterApiController extends ApiController
      */
     public function login(Request $request): JsonResponse
     {
-        if(Auth::attempt(['email' => $request->email, 'password' => $request->password])){ 
-            $user = Auth::user(); 
-            // $success['token'] =  $user->createToken('MyApp')->plainTextToken; 
+        if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
+            $user = Auth::user();
+            // $success['token'] =  $user->createToken('testing')->plainTextToken; // Sanctum
+            // $success['token'] =  $user->createToken('testing')->accessToken; // Passport
             $success['name'] =  $user->name;
-   
+
             return $this->respondWithSuccess($success, 'User login successfully.');
-        } 
-        else{ 
-            return $this->respondWithErrors('Unauthorised.', ['error'=>'Unauthorised']);
-        } 
+        } else {
+            return $this->respondWithErrors('Unauthorised.', ['error' => 'Unauthorised']);
+        }
     }
 }

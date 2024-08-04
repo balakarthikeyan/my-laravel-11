@@ -16,6 +16,7 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->alias([
             'logRequests' => \App\Http\Middleware\LogRequests::class,
+            'authUser' => \App\Http\Middleware\AuthUser::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
