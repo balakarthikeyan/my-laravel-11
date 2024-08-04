@@ -8,6 +8,8 @@ use Illuminate\Http\JsonResponse;
 use App\Http\Resources\ProductResource;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\Api\ApiController;
+use App\Http\Requests\ProductStoreRequest;
+use App\Http\Requests\ProductUpdateRequest;
 
 class ProductApiController extends ApiController
 {
@@ -30,14 +32,11 @@ class ProductApiController extends ApiController
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request): JsonResponse
+    public function store(ProductStoreRequest $request): JsonResponse
     {
         $input = $request->all();
    
-        $validator = Validator::make($input, [
-            'name' => 'required',
-            'details' => 'required'
-        ]);
+        $validator = Validator::make($input, $request->rules());
    
         if($validator->fails()){
             return $this->respondWithErrors('Validation Error.', $validator->errors());       
@@ -72,14 +71,11 @@ class ProductApiController extends ApiController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Product $product): JsonResponse
+    public function update(ProductUpdateRequest $request, Product $product): JsonResponse
     {
         $input = $request->all(); 
    
-        $validator = Validator::make($input, [
-            'name' => 'required',
-            'details' => 'required'
-        ]);
+        $validator = Validator::make($input, $request->rules());
    
         if($validator->fails()){
             return $this->respondWithErrors('Validation Error.', $validator->errors());       

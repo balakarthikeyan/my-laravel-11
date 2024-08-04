@@ -18,6 +18,13 @@ return Application::configure(basePath: dirname(__DIR__))
             'logRequests' => \App\Http\Middleware\LogRequests::class,
             'authUser' => \App\Http\Middleware\AuthUser::class,
         ]);
+
+        // Or removing multiple default middleware
+        // $middleware->remove([
+        //     \Illuminate\Http\Middleware\ValidatePostSize::class,
+        //     \Illuminate\Http\Middleware\TrustProxies::class,
+        //     \Illuminate\Http\Middleware\HandleCors::class,
+        // ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         // $exceptions->renderable(function (NotFoundHttpException $e) {

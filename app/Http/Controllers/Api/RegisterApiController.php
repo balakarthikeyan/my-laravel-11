@@ -19,10 +19,10 @@ class RegisterApiController extends ApiController
     public function register(Request $request): JsonResponse
     {
         $validator = Validator::make($request->all(), [
-            'name' => 'required',
-            'email' => 'required|email',
-            'password' => 'required',
-            'c_password' => 'required|same:password',
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email:rfc,dns|max:255|unique:users,email',
+            'password' => 'required|string|min:8',
+            'confirmed' => 'required|string|min:8|same:password',
         ]);
 
         if ($validator->fails()) {

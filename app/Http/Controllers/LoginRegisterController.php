@@ -32,8 +32,8 @@ class LoginRegisterController extends Controller implements HasMiddleware
     public function postRegistration(Request $request): RedirectResponse
     {
         $request->validate([
-            'name' => 'required|string|max:250',
-            'email' => 'required|string|email:rfc,dns|max:250|unique:users,email',
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email:rfc,dns|max:255|unique:users,email',
             'password' => 'required|string|min:8|confirmed'
         ]);
 
@@ -59,8 +59,8 @@ class LoginRegisterController extends Controller implements HasMiddleware
     public function postLogin(Request $request): RedirectResponse
     {
         $credentials = $request->validate([
-            'email' => 'required|email',
-            'password' => 'required'
+            'email' => 'required|string|email:rfc,dns|max:255',
+            'password' => 'required|string|min:8'
         ]);
 
         if (Auth::attempt($credentials)) {

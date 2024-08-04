@@ -11,11 +11,6 @@ class Category extends Model
 {
     use HasFactory;
 
-    /**
-     * Write code on Method
-     *
-     * @return response()
-     */
     protected $fillable = ['name'];
 
     /**

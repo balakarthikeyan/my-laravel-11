@@ -24,8 +24,8 @@ class UserRequest extends BaseRequest
     {
         return [
             'name' => 'required|string|max:255',
-            'email' => 'required|string|email|unique:users|max:255',
-            'password' => 'required'
+            'email' => 'required|string|email:rfc,dns|max:255|unique:users,email',
+            'password' => 'required|string|min:8'
         ];
     }
 }
