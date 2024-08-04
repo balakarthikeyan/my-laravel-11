@@ -10,7 +10,6 @@
                 <div class="alert alert-success">
                     @if ($message = Session::get('success'))
                     {{ $message }}
-                    {{ session('status') }}
                     @else
                     You are login as a user role. - User
                     @endif

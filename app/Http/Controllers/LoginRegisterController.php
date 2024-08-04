@@ -19,8 +19,8 @@ class LoginRegisterController extends Controller implements HasMiddleware
     public static function middleware(): array
     {
         return [
-            new Middleware('guest', except: ['home', 'logout']),
-            new Middleware('auth', only: ['home', 'logout']),
+            // new Middleware('guest', except: ['home', 'logout']),
+            // new Middleware('auth', only: ['home', 'logout']),
         ];
     }
 
@@ -43,11 +43,12 @@ class LoginRegisterController extends Controller implements HasMiddleware
             'password' => Hash::make($request->password)
         ]);
 
-        $credentials = $request->only('email', 'password');
-        Auth::attempt($credentials);
-        $request->session()->regenerate();
-        return redirect()->route('home')
-            ->withSuccess('You have successfully registered & logged in!');
+        // After register login and redirect
+        // $credentials = $request->only('email', 'password');
+        // Auth::attempt($credentials);
+        // $request->session()->regenerate();
+
+        return redirect()->route('login')->withSuccess('You have successfully registered & logged in!');
     }
 
     public function login(): View
@@ -66,11 +67,11 @@ class LoginRegisterController extends Controller implements HasMiddleware
             $request->session()->regenerate();
 
             if (auth()->user()->type == 'admin') {
-                return redirect()->route('admin.dashboard');
+                return redirect()->route('admin.dashboard')->withSuccess('You have Successfully logged in.');
             } else if (auth()->user()->type == 'manager') {
-                return redirect()->route('manager.dashboard');
+                return redirect()->route('manager.dashboard')->withSuccess('You have Successfully logged in.');
             } else {
-                return redirect()->route('user.dashboard')->withSuccess('You have Successfully loggedin');
+                return redirect()->route('user.dashboard')->withSuccess('You have Successfully logged in.');
             }
         }
 
@@ -79,12 +80,12 @@ class LoginRegisterController extends Controller implements HasMiddleware
         ])->onlyInput('email');
     }
 
-    public function home(): View
+    public function userDashboard()
     {
         if(Auth::check()){
             return view('auth.user');
         }
-  
+
         return redirect("login")->withSuccess('Oops! You do not have access');
     }
 
@@ -93,22 +94,24 @@ class LoginRegisterController extends Controller implements HasMiddleware
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-        return redirect()->route('login')
-            ->withSuccess('You have logged out successfully!');
+        return redirect()->route('login')->withSuccess('You have logged out successfully!');
     }
 
-    public function userDashboard(): View
+    public function managerDashboard()
     {
-        return view('auth.user');
+        if(Auth::check()){
+            return view('auth.manager');
+        }
+
+        return redirect("login")->withSuccess('Oops! You do not have access');
     }
 
-    public function managerDashboard(): View
+    public function adminDashboard()
     {
-        return view('auth.manager');
-    }
+        if(Auth::check()){
+            return view('auth.admin');
+        }
 
-    public function adminDashboard(): View
-    {
-        return view('auth.admin');
+        return redirect("login")->withSuccess('Oops! You do not have access');
     }
 }

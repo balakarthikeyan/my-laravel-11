@@ -61,7 +61,6 @@ Route::controller(LoginRegisterController::class)->group(function () {
     Route::post('/register', 'postRegistration')->name('register.post');
     Route::get('/login', 'login')->name('login');
     Route::post('/authenticate', 'postLogin')->name('login.post');
-    Route::get('/home', 'home')->name('home');
     Route::post('/logout', 'logout')->name('logout');
 });
 
@@ -69,7 +68,9 @@ Route::controller(LoginRegisterController::class)->group(function () {
 
 // Users Routes with Middleware & Multi Auth
 Route::middleware(['auth', 'authUser:user'])->group(function () {
-    Route::get('/user/dashboard', [LoginRegisterController::class, 'userDashboard'])->name('user.dashboard');
+    Route::controller(LoginRegisterController::class)->group(function () {
+        Route::get('/user/dashboard', 'userDashboard')->name('user.dashboard');
+    });
 });
 
 // Manager Routes with Middleware & Multi Auth

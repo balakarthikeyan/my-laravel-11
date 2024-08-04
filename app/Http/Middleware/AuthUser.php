@@ -19,10 +19,6 @@ class AuthUser
             return $next($request);
         }
 
-        if (auth()->user()->type != 1) {
-            return response()->json('Opps! You do not have permission to access.');
-        }
-
         return response()->json(['You do not have permission to access for this page.']);
     }
 }
