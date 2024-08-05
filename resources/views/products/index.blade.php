@@ -28,11 +28,11 @@
                 @forelse ($products as $product)
                 <tr>
                     <td>{{ ++$i }}</td>
-                    <td>{{ $product->name }}</td>
+                    <td>Category : {{ $product->category->name ?? '' }} <br/> {{ $product->name }}</td>
                     <td>{{ $product->details }}</td>
                     <td>
-                        <form action="{{ route('products.destroy',$product->id) }}" method="POST">
-                            <a class="btn btn-info btn-sm" href="{{ route('products.show',$product->id) }}"><i class="fa-solid fa-list"></i> Show</a>
+                        <form action="{{ route('products.destory',$product->id) }}" method="POST">
+                            <a class="btn btn-info btn-sm" href="{{ route('products.show',$product->id) }}"><i class="fa-solid fa-list"></i> View</a>
                             <a class="btn btn-primary btn-sm" href="{{ route('products.edit',$product->id) }}"><i class="fa-solid fa-pen-to-square"></i> Edit</a>
                             @csrf
                             @method('DELETE')

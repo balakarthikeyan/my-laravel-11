@@ -28,6 +28,7 @@
             </div>
             <h1 style="margin-top: 80px;">{{ __('message.welcome') }}</h1>
             <h1 style="margin-top: 80px;">{{ trans('message.welcome') }}</h1>
+            <h1>@lang("Hi there!")</h1>
         </div>
     </div>
 </body>

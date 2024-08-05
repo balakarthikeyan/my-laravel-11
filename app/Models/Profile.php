@@ -33,12 +33,32 @@ class Profile extends Model
     }
 
     /**
-     * Write code on Method
+     * BelongsTo Method
      *
      * @return response()
      */
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    /**
+     * set Attribute Method
+     *
+     * @return response()
+     */
+    public function setCityAttribute($value)
+    {
+        $this->attributes['city'] = ucfirst($value);
+    }
+
+    /**
+     * get Attribute Method
+     *
+     * @return response()
+     */
+    public function getCityAttribute($value)
+    {
+        return strtoupper($value);
     }
 }

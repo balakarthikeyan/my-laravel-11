@@ -86,6 +86,9 @@ class ProductApiController extends ApiController
         $product->category_id = $input['category_id'];
         $product->save();
    
+        // $product = Product::findOrFail($product->id);
+        // $product->update($input);
+
         return $this->setStatusCode(201)->respondWithSuccess(new ProductResource($product), 'Product updated successfully.');
     }
    

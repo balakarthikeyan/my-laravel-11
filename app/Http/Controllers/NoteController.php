@@ -8,8 +8,8 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Http\RedirectResponse;
 use App\Http\Requests\NoteStoreRequest;
-use App\Exceptions\InvalidNoteException;
 use App\Http\Requests\NoteUpdateRequest;
+use App\Exceptions\InvalidNoteException;
 
 class NoteController extends Controller
 {
@@ -18,7 +18,7 @@ class NoteController extends Controller
      */
     public function index(): View
     {
-        $notes = Note::latest()->paginate(5);
+        $notes = Note::status('pending')->orderBy('created_at', 'DESC')->paginate(5);
         return view('notes.index', compact('notes'))
                     ->with('i', (request()->input('page', 1) - 1) * 5);
     }

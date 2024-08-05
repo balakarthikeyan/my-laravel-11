@@ -2,9 +2,9 @@
 
 namespace App\Http\Requests;
 
-use App\Http\Requests\BaseRequest;
+use Illuminate\Foundation\Http\FormRequest;
 
-class ProductUpdateRequest extends BaseRequest
+class LoginRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,8 +22,8 @@ class ProductUpdateRequest extends BaseRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string|max:255',
-            'details' => 'required|string'
+            'email' => 'required|string|email:rfc,dns|max:255',
+            'password' => 'required|string|min:8',
         ];
     }
 }

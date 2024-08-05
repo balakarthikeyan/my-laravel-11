@@ -16,28 +16,17 @@
 
             <div class="mb-3">
                 <label for="inputTitle" class="form-label"><strong>Title:</strong></label>
-                <input 
-                    type="text" 
-                    Title="Title" 
-                    value="{{ $note->title }}"
-                    class="form-control @error('title') is-invalid @enderror" 
-                    id="inputTitle" 
-                    placeholder="Title">
+                <input type="text" title="Title" value="{{ $note->title }}" class="form-control @error('title') is-invalid @enderror" id="inputTitle" placeholder="Title">
                 @error('title')
-                    <div class="form-text text-danger">{{ $message }}</div>
+                <div class="form-text text-danger">{{ $message }}</div>
                 @enderror
             </div>
 
             <div class="mb-3">
-                <label for="inputcontent" class="form-label"><strong>content:</strong></label>
-                <textarea 
-                    class="form-control @error('content') is-invalid @enderror" 
-                    style="height:150px" 
-                    Title="content" 
-                    id="inputcontent" 
-                    placeholder="content">{{ $note->content }}</textarea>
+                <label for="inputContent" class="form-label"><strong>Content:</strong></label>
+                <textarea class="form-control @error('content') is-invalid @enderror" style="height:150px" title="Content" id="inputContent" placeholder="Content">{{ $note->content }}</textarea>
                 @error('content')
-                    <div class="form-text text-danger">{{ $message }}</div>
+                <div class="form-text text-danger">{{ $message }}</div>
                 @enderror
             </div>
             <button type="submit" class="btn btn-success"><i class="fa-solid fa-floppy-disk"></i> Update</button>

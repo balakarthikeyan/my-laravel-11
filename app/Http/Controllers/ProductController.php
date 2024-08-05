@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
-use Illuminate\View\View;
 use App\Classes\ApiResponseClass;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Api\ApiController;
@@ -41,7 +40,7 @@ class ProductController extends ApiController
         ];
         DB::beginTransaction();
         try {
-            $product = $this->productRepositoryInterface->store($details); 
+            $product = $this->productRepositoryInterface->store($details);
 
             DB::commit();
             return $this->setStatusCode(201)->respondWithSuccess(new ProductResource($product), 'Product Created Successfully');
@@ -89,17 +88,5 @@ class ProductController extends ApiController
         $this->productRepositoryInterface->delete($product->id);
 
         return $this->setStatusCode(204)->respondWithSuccess([], 'Product Deleted Successfully');
-    }
-
-    /**
-     * Display a listing of the resource.
-     */
-    public function list(): View
-    {
-        // $products = Product::latest()->paginate(5);
-        $products = Product::with('category')->paginate(5);
-          
-        return view('products.list', compact('products'))
-                    ->with('i', (request()->input('page', 1) - 1) * 5);
     }
 }

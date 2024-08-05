@@ -47,8 +47,8 @@
                 @endforelse
             </tbody>
         </table>
-        
 
+        {!! $notes->links() !!}
 
     </div>
 </div>  

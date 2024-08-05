@@ -5,8 +5,11 @@ namespace App\Models;
 use App\Models\Tag;
 use App\Enums\NoteStatus;
 use App\Traits\Sluggable;
+use App\Models\Scopes\ActiveScope;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Note extends Model
 {
@@ -21,7 +24,20 @@ class Note extends Model
     ];
 
     /**
-     * Write code on Method
+     * The "booting" method of the model.
+     *
+     * @return void
+     */
+    protected static function boot()
+    {
+        parent::boot();
+
+        // using global scope class
+        // static::addGlobalScope(new ActiveScope);
+    }
+
+    /**
+     * Cast Method
      *
      * @return response()
      */
@@ -33,7 +49,7 @@ class Note extends Model
     }
 
     /**
-     * Write code on Method
+     * set Attribute Method
      *
      * @return response()
      */
@@ -54,8 +70,23 @@ class Note extends Model
         return $query->where('status', $type);
     }
 
-    public function tags()
+    /**
+     * BelongsTo Method
+     *
+     * @return response()
+     */
+    public function user(): BelongsTo
     {
-        // return $this->belongsToMany(Tag::class);
+        return $this->belongsTo(User::class);
+    }
+
+    /**
+     * BelongsToMany Method
+     *
+     * @return response()
+     */
+    public function tags(): BelongsToMany
+    {
+        return $this->belongsToMany(Tag::class);
     }
 }

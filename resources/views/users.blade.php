@@ -1,4 +1,10 @@
 
+<form action="{{ route('users.search') }}" method="GET">
+    <input type="text" name="search" placeholder="Search Products" value="">
+    <button type="submit">Search</button>
+    {{csrf_field()}}
+</form>
+ 
 <div class="container-fluid px-4">
     <h1 class="mt-4">Users</h1>
     <div class="row">
