@@ -25,7 +25,7 @@ class RegisterRequest extends FormRequest
             'name' => 'required|string|max:255',
             'email' => 'required|string|email:rfc,dns|max:255|unique:users,email',
             'password' => 'required|string|min:8|confirmed',
-            'confirmed' => 'required|string|min:8|same:password',
+            // 'confirmed' => 'required|string|min:8|same:password',
         ];
     }
 
@@ -42,6 +42,9 @@ class RegisterRequest extends FormRequest
             'password.string' => 'The password field must be a string.',
             'password.min' => 'The password must be at least 8 characters long.',
             'password.confirmed' => 'The password confirmation does not match.',
+            'confirmed.required' => 'The confirm password field is required.',
+            'confirmed.string' => 'The confirm password field must be a string.',
+            'confirmed.min' => 'The confirm password must be at least 8 characters long.',
         ];
     }
 }

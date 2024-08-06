@@ -7,8 +7,8 @@ use Illuminate\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Http\RedirectResponse;
-use App\Http\Requests\ProductStoreRequest;
-use App\Http\Requests\ProductUpdateRequest;
+use App\Http\Requests\ProductBaseStoreRequest;
+use App\Http\Requests\ProductBaseUpdateRequest;
 
 class ProductBaseController extends Controller
 {
@@ -34,9 +34,14 @@ class ProductBaseController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(ProductStoreRequest $request): RedirectResponse
+    public function store(ProductBaseStoreRequest $request): RedirectResponse
     {
-        Product::create($request->all());
+        $input = $request->all(); 
+
+        $input['category_id'] =  1;
+        $input['status'] =  1;
+
+        Product::create($input);
 
         return redirect()->route('products.index')->with('success', 'Product created successfully.');
     }
@@ -62,9 +67,14 @@ class ProductBaseController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(ProductUpdateRequest $request, Product $product): RedirectResponse
+    public function update(ProductBaseUpdateRequest $request, Product $product): RedirectResponse
     {
-        $product->update($request->validated());
+        $input = $request->validated(); 
+
+        $input['category_id'] =  1;
+        $input['status'] =  1;
+
+        $product->update($input);
 
         return redirect()->route('products.index')->with('success', 'Product updated successfully');
     }

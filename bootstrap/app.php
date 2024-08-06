@@ -1,10 +1,12 @@
 <?php
 
-use Illuminate\Http\Client\Request;
+use Illuminate\Http\Request;
 use Illuminate\Foundation\Application;
 use App\Exceptions\InvalidNoteException;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -14,8 +16,6 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
-        
-        $middleware->append(\App\Http\Middleware\Localization::class);
         $middleware->alias([
             'logRequests' => \App\Http\Middleware\LogRequests::class,
             'authUser' => \App\Http\Middleware\AuthUser::class,
@@ -35,5 +35,24 @@ return Application::configure(basePath: dirname(__DIR__))
         // });
 
         // $exceptions->dontReport(InvalidNoteException::class);
+
+        $exceptions->render(function (Request $request, NotFoundHttpException $exception) {
+            if ($exception instanceof ModelNotFoundException && $request->is('api/*') && $request->expectsJson()) {
+                return response()->json([
+                    'status' => 'false',
+                    'message' => 'Route Not found',
+                ], 404);
+            }
+        });
+
+        $exceptions->render(function (Request $request, Exception $exception) {
+            // This will replace our 404 response with a JSON response.
+            if ($exception instanceof ModelNotFoundException && $request->wantsJson()) {
+                return response()->json([
+                    'error' => 'Resource not found'
+                ], 404);
+            }
+            return parent::render($request, $exception);
+        });
 
     })->create();

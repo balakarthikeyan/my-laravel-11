@@ -7,8 +7,6 @@ use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
-use App\Http\Requests\LoginRequest;
-use App\Http\Requests\RegisterRequest;
 use App\Http\Requests\RefreshTokenRequest;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\Api\ApiController;
@@ -49,8 +47,29 @@ class RegisterApiController extends ApiController
      *
      * @return \Illuminate\Http\Response
      */
-    public function login(LoginRequest $request): JsonResponse
+    public function login(Request $request): JsonResponse
     {
+
+        $input = $request->all();
+
+        $validator = Validator::make($input, [
+            'email' => 'required|string|email:rfc,dns|max:255',
+            'password' => 'required|string|min:8'
+        ]);
+
+        //Add Hooks
+        $validator->after(function ($validator) use ($request) {
+            if ($request->password == "00000000") {
+                $validator->errors()->add(
+                    'password', 'Something is wrong with this field!'
+                );
+            }
+        });
+
+        if ($validator->fails()) {
+            return $this->respondWithErrors('Validation Error.', $validator->errors());
+        }
+
         if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
             $user = Auth::user();
             // $success['token'] =  $user->createToken('testing')->plainTextToken; // Sanctum
@@ -84,11 +103,11 @@ class RegisterApiController extends ApiController
     /**
      * Logged user
      *
-     * @param  LoginRequest  $request
+     * @return void
      */
     public function me(): JsonResponse
     {
-        $user = auth()->user();
+        $user = auth()->user(); 
 
         return $this->respondWithSuccess($user, 'Authenticated Information.');
     }

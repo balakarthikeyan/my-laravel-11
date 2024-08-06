@@ -14,7 +14,7 @@ class ApiResponseClass
     {
         DB::rollBack();
         Log::info($e);
-        throw new HttpResponseException(response()->json(["error" => $e, "message" => $message], 500));
+        throw new HttpResponseException(self::sendResponse($message, $e, 500));
     }
 
     /**
@@ -26,8 +26,11 @@ class ApiResponseClass
     {
         $response = [
             'success' => true,
-            'data'    => $result
+            'status'  => $code,
         ];
+        if (!empty($result)) {
+            $response['data'] = $result;
+        }
         if (!empty($message)) {
             $response['message'] = $message;
         }
@@ -39,17 +42,18 @@ class ApiResponseClass
      *
      * @return \Illuminate\Http\Response
      */
-    public static function sendError($error, $errorMessages = [], $code = 404)
+    public static function sendError($message, $errorMessages = [], $code = 404)
     {
         $response = [
             'success' => false,
-            'message' => $error,
+            'status'  => $code,
         ];
-
         if (!empty($errorMessages)) {
             $response['data'] = $errorMessages;
         }
-
+        if (!empty($message)) {
+            $response['message'] = $message;
+        }
         return response()->json($response, $code);
     }
 }

@@ -8,8 +8,6 @@ use Illuminate\Http\JsonResponse;
 use App\Http\Resources\ProductResource;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\Api\ApiController;
-use App\Http\Requests\ProductStoreRequest;
-use App\Http\Requests\ProductUpdateRequest;
 
 class ProductApiController extends ApiController
 {
@@ -32,14 +30,17 @@ class ProductApiController extends ApiController
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(ProductStoreRequest $request): JsonResponse
+    public function store(Request $request): JsonResponse
     {
         $input = $request->all();
    
-        $validator = Validator::make($input, $request->rules());
+        $validator = Validator::make($input, [
+            'name' => 'required|string|max:255',
+            'details' => 'required|string'
+        ]);
    
         if($validator->fails()){
-            return $this->respondWithErrors('Validation Error.', $validator->errors());       
+            return $this->respondWithErrors('Validation Error.', $validator->errors());
         }
    
         $product = Product::create($input);
@@ -71,11 +72,14 @@ class ProductApiController extends ApiController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(ProductUpdateRequest $request, Product $product): JsonResponse
+    public function update(Request $request, Product $product): JsonResponse
     {
         $input = $request->all(); 
    
-        $validator = Validator::make($input, $request->rules());
+        $validator = Validator::make($input, [
+            'name' => 'required|string|max:255',
+            'details' => 'required|string'
+        ]);
    
         if($validator->fails()){
             return $this->respondWithErrors('Validation Error.', $validator->errors());       
@@ -84,10 +88,8 @@ class ProductApiController extends ApiController
         $product->name = $input['name'];
         $product->details = $input['details'];
         $product->category_id = $input['category_id'];
+        $product->status = $input['status'];
         $product->save();
-   
-        // $product = Product::findOrFail($product->id);
-        // $product->update($input);
 
         return $this->setStatusCode(201)->respondWithSuccess(new ProductResource($product), 'Product updated successfully.');
     }

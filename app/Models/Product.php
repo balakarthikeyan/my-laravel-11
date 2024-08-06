@@ -15,7 +15,8 @@ class Product extends Model
     protected $fillable = [
         'name',
         'details',
-        'category_id'
+        'category_id',
+        'status'
     ];
 
     /**
@@ -28,9 +29,9 @@ class Product extends Model
         parent::boot();
 
         // let's add another scope using anonymous function
-        static::addGlobalScope('status', function (Builder $builder) {
-            $builder->where('status', 1);
-        });
+        // static::addGlobalScope('status', function (Builder $builder) {
+        //     $builder->where('status', 1);
+        // });
     }
 
     /**

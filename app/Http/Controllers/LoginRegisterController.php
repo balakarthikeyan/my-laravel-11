@@ -9,10 +9,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\RedirectResponse;
+use App\Http\Requests\LoginRequest;
+use App\Http\Requests\RegisterRequest;
 use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Routing\Controllers\HasMiddleware;
-use Illuminate\Foundation\Auth\AuthenticatesUsers;
-use Illuminate\Foundation\Support\Providers\RouteServiceProvider;
 
 class LoginRegisterController extends Controller implements HasMiddleware
 {
@@ -29,13 +29,9 @@ class LoginRegisterController extends Controller implements HasMiddleware
         return view('auth.register');
     }
 
-    public function postRegistration(Request $request): RedirectResponse
+    public function postRegistration(RegisterRequest $request): RedirectResponse
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email:rfc,dns|max:255|unique:users,email',
-            'password' => 'required|string|min:8|confirmed'
-        ]);
+        $request->validate($request->rules());
 
         $user = User::create([
             'name' => $request->name,
@@ -56,12 +52,9 @@ class LoginRegisterController extends Controller implements HasMiddleware
         return view('auth.login');
     }
 
-    public function postLogin(Request $request): RedirectResponse
+    public function postLogin(LoginRequest $request): RedirectResponse
     {
-        $credentials = $request->validate([
-            'email' => 'required|string|email:rfc,dns|max:255',
-            'password' => 'required|string|min:8'
-        ]);
+        $credentials = $request->validate($request->rules());
 
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
