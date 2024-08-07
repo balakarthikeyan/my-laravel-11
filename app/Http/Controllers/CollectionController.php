@@ -114,4 +114,9 @@ class CollectionController extends Controller
         $users = User::all();
         return $users->pluck('name')->except('id', 30)->forget('Bethany Parker')->skip(29);
     }
+
+    public function macroMethod() {
+        $collection = collect(['apple', 'banana', 'strawberry']);
+        return $collection->pluralize();
+    }
 }

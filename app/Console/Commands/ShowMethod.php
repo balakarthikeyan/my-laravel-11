@@ -28,10 +28,11 @@ class ShowMethod extends Command
     {
         $collectionsController = new CollectionController();
 
-        dump($collectionsController->collectionMethod());
+        // dump($collectionsController->collectionMethod());
         // dump($collectionsController->ddMethod());
         // dump($collectionsController->avgMethod());
         // dump($collectionsController->mapWithKeysMethod());
         // dump($collectionsController->usefulMethod());
+        dump($collectionsController->macroMethod());
     }
 }

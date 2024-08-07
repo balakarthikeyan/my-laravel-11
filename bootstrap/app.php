@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Http\Request;
+use App\Exceptions\CustomException;
 use Illuminate\Foundation\Application;
 use App\Exceptions\InvalidNoteException;
 use Illuminate\Auth\AuthenticationException;
@@ -39,7 +40,7 @@ return Application::configure(basePath: dirname(__DIR__))
         // $exceptions->dontReport(InvalidNoteException::class);
 
         $exceptions->render(function (Request $request, NotFoundHttpException $exception) {
-            if ($exception instanceof ModelNotFoundException && $request->is('api/*') && $request->expectsJson()) {
+            if ($exception instanceof NotFoundHttpException && $request->is('api/*') && $request->expectsJson()) {
                 return response()->json([
                     'status' => 'false',
                     'message' => 'Route Not found',
@@ -59,12 +60,24 @@ return Application::configure(basePath: dirname(__DIR__))
         });
 
         $exceptions->render(function (Request $request, AuthenticationException $exception) {
-            if ($request->is('api/*')) {
+            if ($request->is('api/*') && $request->expectsJson()) {
                 return response()->json([
                     'status' => 'false',
                     'message' => $exception->getMessage(),
                 ], 401);
+            } else {
+                return redirect()->guest(route('login'));
             }
+        });
+
+        $exceptions->render(function (Request $request, Exception $exception) {
+            if ($exception instanceof CustomException) {
+                return response()->json([
+                    'status' => 'false',
+                    'message' => $exception->getMessage(),
+                ], 500);
+            }
+            return parent::render($request, $exception);
         });
 
     })->create();

@@ -4,6 +4,8 @@ namespace App\Providers;
 
 use App\Helpers\Helper;
 use App\Services\CustomService;
+use Illuminate\Support\Str;
+use Illuminate\Support\Collection;
 use Illuminate\Support\ServiceProvider;
 
 class CustomFacadeServiceProvider extends ServiceProvider
@@ -27,6 +29,10 @@ class CustomFacadeServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+		Collection::macro('pluralize', function () {
+			return $this->map(function ($value) {
+				 return Str::plural($value);
+			});
+		});
     }
 }
