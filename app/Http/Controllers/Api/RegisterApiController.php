@@ -87,7 +87,7 @@ class RegisterApiController extends ApiController
      *
      * @return void
      */
-    public function customToken(object $request): JsonResponse
+    public function customToken(Request $request): JsonResponse
     {
         $response = Http::post(env('APP_URL') . '/oauth/token', [
             'grant_type' => 'password',
@@ -97,7 +97,7 @@ class RegisterApiController extends ApiController
             'password' => $request->password,
             'scope' => '',
         ]);
-        return $response->json();
+        return $this->respondWithSuccess($response->json(), 'Custom token.');
     }
 
     /**

@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Foundation\Application;
 use App\Exceptions\InvalidNoteException;
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -16,6 +17,7 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
+        $middleware->append(\App\Http\Middleware\Localization::class);
         $middleware->alias([
             'logRequests' => \App\Http\Middleware\LogRequests::class,
             'authUser' => \App\Http\Middleware\AuthUser::class,
@@ -49,10 +51,20 @@ return Application::configure(basePath: dirname(__DIR__))
             // This will replace our 404 response with a JSON response.
             if ($exception instanceof ModelNotFoundException && $request->wantsJson()) {
                 return response()->json([
-                    'error' => 'Resource not found'
+                    'status' => 'false',
+                    'message' => 'Resource/Model Not found',
                 ], 404);
             }
             return parent::render($request, $exception);
+        });
+
+        $exceptions->render(function (Request $request, AuthenticationException $exception) {
+            if ($request->is('api/*')) {
+                return response()->json([
+                    'status' => 'false',
+                    'message' => $exception->getMessage(),
+                ], 401);
+            }
         });
 
     })->create();

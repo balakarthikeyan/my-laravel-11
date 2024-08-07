@@ -30,11 +30,13 @@ Route::group(['middleware' => ['logRequests']], function () {
     Route::controller(RegisterApiController::class)->group(function () {
         Route::post('register', 'register');
         Route::post('login', 'login');
+        Route::post('customtoken', 'customToken');
     });
 });
 Route::middleware('auth:api')->group(function () {
     Route::controller(RegisterApiController::class)->group(function () {
         Route::get('me', 'me');
         Route::get('logout', 'logout');
+        Route::post('refresh', 'refreshToken');
     });
 });

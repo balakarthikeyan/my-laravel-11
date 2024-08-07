@@ -8,6 +8,7 @@ use App\Http\Resources\UserCollection;
 use App\Http\Controllers\NoteController;
 use App\Http\Controllers\TestController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\FileUploadController;
 use App\Http\Controllers\ProductBaseController;
 use App\Http\Controllers\LocalizationController;
 use App\Http\Controllers\LoginRegisterController;
@@ -29,6 +30,7 @@ Route::middleware(['logRequests'])->group(function () {
     Route::get('test-enum', [TestController::class, 'testEnumMethod']);
     Route::get('test-trait', [TestController::class, 'testTraitMethod']);
     Route::get('test-once', [TestController::class, 'testOnceMethod']);
+    Route::get('test-facade', [TestController::class, 'testFacadeMethod']);
 
     // Users
     Route::get('users', [UserController::class, 'index']);
@@ -74,6 +76,11 @@ Route::middleware(['logRequests'])->group(function () {
     Route::post('/products', [ProductBaseController::class, 'store'])->name('products.store');
     Route::put('/products/{product}', [ProductBaseController::class, 'update'])->name('products.update');
     Route::delete('/products/{product}', [ProductBaseController::class, 'destroy'])->name('products.destroy');
+
+    // File Upload
+    Route::get('/file-upload', [FileUploadController::class, 'index'])->name('fileupload.index');
+    Route::post('/multiple-file-upload', [FileUploadController::class, 'multipleUpload'])->name('multiple.fileupload');
+
 });
 
 // Users Routes with Middleware & Multi Auth

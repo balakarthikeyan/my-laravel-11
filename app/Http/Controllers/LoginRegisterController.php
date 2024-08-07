@@ -19,8 +19,8 @@ class LoginRegisterController extends Controller implements HasMiddleware
     public static function middleware(): array
     {
         return [
-            // new Middleware('guest', except: ['home', 'logout']),
-            // new Middleware('auth', only: ['home', 'logout']),
+            // new Middleware('guest', except: ['user.dashboard', 'logout']),
+            // new Middleware('auth', only: ['user.dashboard', 'logout']),
         ];
     }
 
