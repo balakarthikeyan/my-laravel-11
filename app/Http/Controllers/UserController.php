@@ -13,7 +13,7 @@ class UserController extends Controller
     public function index()
     {
         $users = User::get();
-        return view('users', compact('users'));
+        return view('user.list', compact('users'));
     }
 
     /**
@@ -53,6 +53,6 @@ class UserController extends Controller
         $search = $request->input('search');
         $users = User::where('name', 'like', "%$search%")->get();
         
-        return view('users', compact('users'));
+        return view('user.list', compact('users'));
     }
 }

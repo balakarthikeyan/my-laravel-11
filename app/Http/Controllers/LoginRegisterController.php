@@ -18,7 +18,7 @@ class LoginRegisterController extends Controller
 
     public function registration(): View
     {
-        return view('auth.register');
+        return view('user.register');
     }
 
     public function postRegistration(RegisterRequest $request): RedirectResponse
@@ -41,7 +41,7 @@ class LoginRegisterController extends Controller
 
     public function login(): View
     {
-        return view('auth.login');
+        return view('user.login');
     }
 
     public function postLogin(LoginRequest $request): RedirectResponse
@@ -68,7 +68,7 @@ class LoginRegisterController extends Controller
     public function userDashboard()
     {
         if (Auth::check()) {
-            return view('auth.user');
+            return view('user.user');
         }
 
         return redirect("login")->withSuccess('Oops! You do not have access');
@@ -85,7 +85,7 @@ class LoginRegisterController extends Controller
     public function managerDashboard()
     {
         if (Auth::check()) {
-            return view('auth.manager');
+            return view('user.manager');
         }
 
         return redirect("login")->withSuccess('Oops! You do not have access');
@@ -94,7 +94,7 @@ class LoginRegisterController extends Controller
     public function adminDashboard()
     {
         if (Auth::check()) {
-            return view('auth.admin');
+            return view('user.admin');
         }
 
         return redirect("login")->withSuccess('Oops! You do not have access');

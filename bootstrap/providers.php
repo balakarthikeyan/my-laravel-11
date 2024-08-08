@@ -9,4 +9,5 @@ return [
     App\Providers\RouteServiceProvider::class,
     App\Providers\TelescopeServiceProvider::class,
     Laravel\Passport\PassportServiceProvider::class,
+    App\Providers\LiveWireServiceProvider::class,
 ];

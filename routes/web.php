@@ -12,6 +12,7 @@ use App\Http\Controllers\FileUploadController;
 use App\Http\Controllers\ProductBaseController;
 use App\Http\Controllers\LocalizationController;
 use App\Http\Controllers\LoginRegisterController;
+use App\Livewire\Posts;
 
 Route::get('/', function () {
     return view('welcome');
@@ -81,6 +82,8 @@ Route::middleware(['logRequests'])->group(function () {
     Route::get('/file-upload', [FileUploadController::class, 'index'])->name('fileupload.index');
     Route::post('/multiple-file-upload', [FileUploadController::class, 'multipleUpload'])->name('multiple.fileupload');
 
+    //Posts
+    Route::get('posts', Posts::class);
 });
 
 // Users Routes with Middleware & Multi Auth
