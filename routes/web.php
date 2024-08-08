@@ -99,3 +99,13 @@ Route::middleware(['auth', 'authUser:manager', 'logRequests'])->group(function (
 Route::middleware(['auth', 'authUser:admin', 'logRequests'])->group(function () {
     Route::get('/admin/dashboard', [LoginRegisterController::class, 'adminDashboard'])->name('admin.dashboard');
 });
+
+Route::middleware([
+    'auth:sanctum',
+    config('jetstream.auth_session'),
+    'verified',
+])->group(function () {
+    Route::get('/dashboard', function () {
+        return view('dashboard');
+    })->name('dashboard');
+});
