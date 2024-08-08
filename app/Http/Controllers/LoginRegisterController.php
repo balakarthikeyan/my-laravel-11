@@ -12,17 +12,9 @@ use Illuminate\Http\RedirectResponse;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
 use Illuminate\Routing\Controllers\Middleware;
-use Illuminate\Routing\Controllers\HasMiddleware;
 
-class LoginRegisterController extends Controller implements HasMiddleware
+class LoginRegisterController extends Controller
 {
-    public static function middleware(): array
-    {
-        return [
-            // new Middleware('guest', except: ['user.dashboard', 'logout']),
-            // new Middleware('auth', only: ['user.dashboard', 'logout']),
-        ];
-    }
 
     public function registration(): View
     {
@@ -75,7 +67,7 @@ class LoginRegisterController extends Controller implements HasMiddleware
 
     public function userDashboard()
     {
-        if(Auth::check()){
+        if (Auth::check()) {
             return view('auth.user');
         }
 
@@ -92,7 +84,7 @@ class LoginRegisterController extends Controller implements HasMiddleware
 
     public function managerDashboard()
     {
-        if(Auth::check()){
+        if (Auth::check()) {
             return view('auth.manager');
         }
 
@@ -101,7 +93,7 @@ class LoginRegisterController extends Controller implements HasMiddleware
 
     public function adminDashboard()
     {
-        if(Auth::check()){
+        if (Auth::check()) {
             return view('auth.admin');
         }
 

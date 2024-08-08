@@ -4,12 +4,14 @@ namespace App\Http\Controllers\Api;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 use App\Http\Requests\RefreshTokenRequest;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\Api\ApiController;
+use Illuminate\Http\Client\RequestException;
 
 class RegisterApiController extends ApiController
 {
@@ -61,7 +63,8 @@ class RegisterApiController extends ApiController
         $validator->after(function ($validator) use ($request) {
             if ($request->password == "00000000") {
                 $validator->errors()->add(
-                    'password', 'Something is wrong with this field!'
+                    'password',
+                    'Something is wrong with this field!'
                 );
             }
         });
@@ -96,7 +99,9 @@ class RegisterApiController extends ApiController
             'username' => $request->email,
             'password' => $request->password,
             'scope' => '',
-        ]);
+        ])->throw(function (Response $response, RequestException $e) {
+            return $this->respondWithErrors('Request Error.', $e);
+        });
         return $this->respondWithSuccess($response->json(), 'Custom token.');
     }
 
@@ -107,7 +112,7 @@ class RegisterApiController extends ApiController
      */
     public function me(): JsonResponse
     {
-        $user = auth()->user(); 
+        $user = auth()->user();
 
         return $this->respondWithSuccess($user, 'Authenticated Information.');
     }
@@ -138,5 +143,22 @@ class RegisterApiController extends ApiController
         Auth::user()->tokens()->delete();
 
         return $this->setStatusCode(204)->respondWithSuccess([], 'Logged out successfully.');
+    }
+
+    /**
+     * @OA\Get(
+     * path="/api/myusers",
+     * summary="Get a list of users",
+     * tags={"Users"},
+     * @OA\Response(
+     * response=200,
+     * description="List of users",
+     * ),
+     * )
+     */
+    public function index()
+    {
+        $users = User::all();
+        return $this->respondWithSuccess($users, 'User register successfully.');
     }
 }

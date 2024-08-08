@@ -7,6 +7,7 @@ use App\Enums\NoteStatus;
 use App\Traits\Sluggable;
 use App\Models\Scopes\ActiveScope;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -15,6 +16,7 @@ class Note extends Model
 {
     use HasFactory;
     use Sluggable;
+    use SoftDeletes;
 
     protected $fillable = [
         'title',

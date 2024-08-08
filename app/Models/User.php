@@ -62,8 +62,15 @@ class User extends Authenticatable
         return $this->hasOne(Profile::class)->withDefault(Profile::empty());
     }
 
+    /**
+     * Attribute Method
+     *
+     * @return Attribute
+     */
     protected function type(): Attribute
     {
+        $locale = app()->getLocale();
+
         return new Attribute(
             get: fn ($value) =>  ["user", "admin", "manager"][$value],
         );
