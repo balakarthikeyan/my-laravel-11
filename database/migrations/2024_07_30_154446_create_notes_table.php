@@ -16,9 +16,8 @@ return new class extends Migration
             $table->string('title');
             $table->text('content');
             $table->string('slug');
-            $table->string('status')->default('pending');
             $table->foreignId('user_id')->constrained('users');
-            // $table->enum('status', ['pending', 'active', 'inactive', 'rejected'])->default('pending');
+            $table->enum('status', ['pending', 'active', 'inactive', 'rejected'])->default('pending');
             // DB::statement("ALTER TABLE `notes` CHANGE `status` `status` ENUM('pending', 'active', 'inactive', 'rejected') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'pending';");
             $table->timestamps();
         });

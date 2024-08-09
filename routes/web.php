@@ -1,6 +1,9 @@
 <?php
 
 use App\Models\User;
+use App\Models\Product;
+use App\Livewire\Posts;
+use Illuminate\Support\Benchmark;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Collections\MyCollection;
@@ -8,11 +11,11 @@ use App\Http\Resources\UserCollection;
 use App\Http\Controllers\NoteController;
 use App\Http\Controllers\TestController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\EloquentController;
 use App\Http\Controllers\FileUploadController;
 use App\Http\Controllers\ProductBaseController;
 use App\Http\Controllers\LocalizationController;
 use App\Http\Controllers\LoginRegisterController;
-use App\Livewire\Posts;
 
 Route::get('/', function () {
     return view('welcome');
@@ -84,6 +87,17 @@ Route::middleware(['logRequests'])->group(function () {
 
     //Posts
     Route::get('posts', Posts::class);
+
+    // Eloquent Method
+    Route::get('/test-orm', [EloquentController::class, 'users'])->name('test.users');
+
+    Route::get('benchmark', function() {
+        Benchmark::dd([
+            "Enum" => fn() => User::where("status", 0)->count(),
+            "Bigint" => fn() => Product::where("status", 0)->count(),
+        ], 10);
+    });
+
 });
 
 // Users Routes with Middleware & Multi Auth

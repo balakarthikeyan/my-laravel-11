@@ -23,7 +23,7 @@ class LogRequests
     	$log['user_id'] = auth()->check() ? auth()->user()->id : 0;
         
         // Log the incoming request
-        info('Incoming request: ' . request()->json($log));
+        info('Incoming request: ' . response()->json($log)); 
   
         // Continue to the next middleware or controller
         return $next($request);

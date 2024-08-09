@@ -13,7 +13,7 @@ class Profile extends Model
 
     protected $fillable = [
         'user_id',
-        'type',
+        'bio',
         'address',
         'city',
         'country',
@@ -24,7 +24,7 @@ class Profile extends Model
     {
         return [
             'user_id' => 0,
-            'type' => 'user',
+            'bio' => '',
             'address' => '',
             'city' => '',
             'country' => '',
