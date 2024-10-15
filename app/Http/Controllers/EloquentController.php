@@ -76,7 +76,7 @@ class EloquentController extends ApiController
         //     'email' => 'balakarthikeyan00@gmail.com',
         //     'password' => Hash::make('12345678')
         // ];
-        
+
         // DB::beginTransaction();
         // try {
         //     $users = User::create($superUser);
@@ -128,4 +128,109 @@ class EloquentController extends ApiController
         // return view('user.list', compact('users'));
     }
 
+    /**
+     * Display a listing of the resource.
+     */
+    public function notes(Request $request)
+    {
+        $notes = Note::all();
+
+        // $user = User::find(1);
+        // $user->settings = ['theme' => 'dark', 'notifications' => true];
+        // $user->save();
+        // // Accessing the attribute
+        // $settings = $user->settings; // ['theme' => 'dark', 'notifications' => true]
+
+        /*
+        // scope
+        // $notes = Note::status('pending')->get(['id', 'title', 'content']);
+
+        // global scope
+        // $notes = Note::withoutGlobalScope(ActiveScope::class)->get();
+
+        $notes = Note::find(1);	
+        $tag = new Tag;
+        $tag->name = "Laravel";
+        $notes->tags()->save($tag);
+
+        $product = Product::find(1);	
+        $tag1 = new Tag;
+        $tag1->name = "Laravel";
+        $tag2 = new Tag;
+        $tag2->name = "jQuery";
+        $product->tags()->saveMany([$tag1, $tag2]);
+
+        // Attaching a product from a course
+        $product->tags()->attach([$tag1->id, $tag2->id]);
+        $product->tags()->sync([$tag1->id, $tag2->id]);
+        // Detaching a product from a course
+        $product->tags()->detach($tag->id);
+        // Retrieving all courses for a product
+        $productTags = $product->tag;
+        */
+
+        return $notes;
+    }
+
+    /**
+     * Display a listing of the resource.
+     */
+    public function products(Request $request)
+    {
+
+        $data = [
+            'name' => 'Product 1',
+            'details' => 'What Are JSON Fields',
+            'category_id' => 1,
+            'specs' => ['tags' => ['biscuit', 'chocolate', 'milk']],
+        ];
+
+        DB::beginTransaction();
+        try {
+            $product = Product::create($data);
+            // $product = new ProductResource($product);
+
+
+            // $product = Product::whereJsonContains('details->tags', 'chocolate')->get();
+
+
+            // $product = Product::find(3);
+            // $details = $product->details;
+            // $details['tags'][] = 'cashew';
+            // $product->details = $details;
+            // $product->update();
+
+            // $product = Product::find(3);
+            // $details = $product->details;
+            // unset($details['tags']);
+            // $product->details = $details;
+            // $product->save();
+
+
+            // $product = Product::create([
+            //     'name' => 'Platinum 1',
+            //     'price' => 10
+            // ]);
+
+            // $post = Post::create(['title' => 'New Post', 'content' => 'Post content']);
+
+            // $users = DB::table('users')->whereJsonContains('preferences->notifications', 'email')->get();
+            // $input = [
+            // 'name' => 'Gold',
+            // 'body' => 'This is a Gold',
+            // 'status' => ProductStatus::Active
+            // ];
+
+            // $product = Product::create($input);
+
+            // dd($product->status, $product->status->value);
+
+            // $users = DB::table('users')->select("*")->orderByRaw("concat(first_name, ' ', last_name) DESC")->get();
+
+            DB::commit();
+            return $this->setStatusCode(201)->respondWithSuccess($product, 'Message of Success');
+        } catch (\Exception $ex) {
+            return ApiResponseClass::rollback($ex);
+        }
+    }
 }
