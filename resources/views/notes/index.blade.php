@@ -1,9 +1,9 @@
-@extends('notes.layout')
+@extends('layouts.app')
 
 @section('content')
 
 <div class="card mt-5">
-    <h2 class="card-header">Laravel CRUD Example</h2>
+    <h2 class="card-header">Notes</h2>
     <div class="card-body">
         
         @if(session('success'))
@@ -47,8 +47,8 @@
                 @endforelse
             </tbody>
         </table>
-        
 
+        {!! $notes->links() !!}
 
     </div>
 </div>  

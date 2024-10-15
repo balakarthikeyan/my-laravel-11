@@ -15,8 +15,15 @@ class LogRequests
      */
     public function handle(Request $request, Closure $next): Response
     {
+        $log = [];
+    	$log['url'] = $request->fullUrl();
+    	$log['method'] = $request->method();
+    	$log['ip'] = $request->ip();
+    	$log['agent'] = $request->header('user-agent');
+    	$log['user_id'] = auth()->check() ? auth()->user()->id : 0;
+        
         // Log the incoming request
-        info('Incoming request: ' . $request->fullUrl());
+        info('Incoming request: ' . response()->json($log)); 
   
         // Continue to the next middleware or controller
         return $next($request);

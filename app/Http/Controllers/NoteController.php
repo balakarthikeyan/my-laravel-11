@@ -8,8 +8,8 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Http\RedirectResponse;
 use App\Http\Requests\NoteStoreRequest;
-use App\Exceptions\InvalidNoteException;
 use App\Http\Requests\NoteUpdateRequest;
+use App\Exceptions\InvalidNoteException;
 
 class NoteController extends Controller
 {
@@ -18,8 +18,7 @@ class NoteController extends Controller
      */
     public function index(): View
     {
-        // $notes = Note::all();
-        $notes = Note::latest()->paginate(5);
+        $notes = Note::status('pending')->orderBy('created_at', 'DESC')->paginate(5);
         return view('notes.index', compact('notes'))
                     ->with('i', (request()->input('page', 1) - 1) * 5);
     }
@@ -37,7 +36,6 @@ class NoteController extends Controller
      */
     public function store(NoteStoreRequest $request): RedirectResponse
     {
-        // Note::create($request->all());
         Note::create($request->validated());
         return redirect()->route('notes.index')
                          ->with('success', 'Note created successfully.');
@@ -62,7 +60,6 @@ class NoteController extends Controller
      */
     public function edit(Note $note): View
     {
-        // $note = Note::findOrFail($id);
         return view('notes.edit', compact('note'));
     }
 
@@ -71,7 +68,6 @@ class NoteController extends Controller
      */
     public function update(NoteUpdateRequest $request, Note $note): RedirectResponse
     {
-        // $note = Note::findOrFail($id);
         $note->update($request->validated());
         return redirect()->route('notes.index')
                         ->with('success', 'Note updated successfully');
@@ -82,7 +78,6 @@ class NoteController extends Controller
      */
     public function destroy(Note $note): RedirectResponse
     {
-        // $note = Note::findOrFail($id);
         $note->delete();
         return redirect()->route('notes.index')
                         ->with('success', 'Note deleted successfully');

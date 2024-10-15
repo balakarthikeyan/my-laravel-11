@@ -30,10 +30,11 @@ class BaseRequest extends FormRequest
 
     public function failedValidation(Validator $validator)
     {
-       throw new HttpResponseException(response()->json([
-         'success'   => false,
-         'message'   => 'Validation errors',
-         'data'      => $validator->errors()
-       ],400));
+        throw new HttpResponseException(response()->json([
+            'success'   => false,
+            'message'   => 'Validation errors',
+            'data'      => $validator->errors(),
+            'status'    => 200,
+        ]));
     }
 }
