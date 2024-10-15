@@ -206,7 +206,6 @@ class EloquentController extends ApiController
             // $product->details = $details;
             // $product->save();
 
-
             // $product = Product::create([
             //     'name' => 'Platinum 1',
             //     'price' => 10
